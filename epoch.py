@@ -4,14 +4,9 @@ from tqdm.auto import tqdm
 import torch
 import matplotlib.pyplot as plt
 
-import math
 import torch
-import torchvision
-import torchvision.transforms as transforms
-import numpy as np
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
+
+from utils import plot_grad_flow
 
 kl_anneal_step = 0
 best_acc = 0
@@ -28,8 +23,8 @@ def train_epoch(args, epoch_idx, model, dataloader, optimizer, scheduler, loss_f
     trn_loss = 0.0
     train_total = 0
     train_correct = 0
-    for i, data in enumerate(dataloader):
-        x, labels = data
+    for batch_idx, batch in enumerate(tqdm(dataloader, desc=f'TRAIN EPOCH {epoch_idx}/{args.epoch}')):
+        x, labels = batch
         # grad init
         optimizer.zero_grad()
         # forward propagation
@@ -40,16 +35,23 @@ def train_epoch(args, epoch_idx, model, dataloader, optimizer, scheduler, loss_f
         train_correct += (predicted == labels).sum().item()
         # calculate loss
         loss = loss_fn(model_output, labels)
-        # back propagation 
+
         loss.backward()
-        # weight update
         optimizer.step()
+        scheduler.step()
         
         # trn_loss summary
         trn_loss += loss.item()
+        batch_acc = 100 * train_correct / train_total
         # del (memory issue)
         del loss
         del model_output
-        if (i+1) % 100 == 0:
-            print("epoch: {}/{} | batch: {} | trn loss: {:.4f} | trn acc: {:.4f}%".
-                  format(epoch_idx+1, args.epoch_num, i+1,  trn_loss / i, 100 * train_correct / train_total)) 
+        if batch_idx % args.log_interval == 0 or batch_idx == len(dataloader) - 1:
+                tqdm.write(f'TRAIN: {batch_idx}/{len(dataloader)} - Loss={loss.item()}')
+        if args.save_gradient_flow:
+            plot_grad_flow(model.named_parameters())
+        if args.use_tensorboard_logging:
+            total_idx = batch_idx + (epoch_idx * len(dataloader))
+            writer.add_scalar('TRAIN/Loss', loss.item() / args.batch_size, total_idx)
+            writer.add_scalar('TRAIN/Batch_Accuracy', batch_acc.item(), batch_idx+(epoch_idx*len(dataloader)))
+        torch.save(model.state_dict(), args.save_modle_path) 

@@ -1,11 +1,7 @@
 import math
 import torch
-import torchvision
-import torchvision.transforms as transforms
-import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
 
 class Conv2dSamePadding(nn.Conv2d): 
     def __init__(self, in_channels, out_channels, kernel_size, stride=1, dilation=1, groups=1, bias=True):

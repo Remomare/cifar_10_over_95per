@@ -2,13 +2,9 @@ import os
 import argparse
 from tqdm.auto import tqdm
 
-import math
 import torch
 import torchvision
-import torchvision.transforms as transforms
-import numpy as np
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
 
@@ -64,7 +60,8 @@ def main(args):
 if __name__ == "__main":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--model_type', type=str)
+    parser.add_argument('--model_type', type=str, default='pre-trained')
+    parser.add_argument('save_model_path', type=str, default="./cifar_Effi_net.pth")
 
     parser.add_argument('--load_from_checkpoint', default=None, type=str, help='Path of existing model')
     parser.add_argument('--save_checkpoint_path', default='./model_checkpoint/', type=str, help='Path to save model checkpoint')
