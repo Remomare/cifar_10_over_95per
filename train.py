@@ -66,5 +66,7 @@ if __name__ == "__main":
     parser.add_argument('--load_from_checkpoint', default=None, type=str, help='Path of existing model')
     parser.add_argument('--save_checkpoint_path', default='./model_checkpoint/', type=str, help='Path to save model checkpoint')
     parser.add_argument('--save_result_path', default='./model_result/', type=str, help='Path to save final model')
+    parser.add_argument('--tensorboard_log_dir', default='runs', type=str)
 
     parser.add_argument('--epoch_num', type=int, default=50)
+    parser.add_argument('--batch_size', type=int, default=64)
