@@ -21,7 +21,7 @@ def main(args):
     datasets = {}
     dataloaders = {}
 
-    traindataset, traindataloaders = dataset.init_dataset(args)
+    traindataset, _ ,traindataloaders, _ , classes = dataset.init_dataset(args)
     if args.dataset_preprocessing:
         traindataset, traindataloaders = data_preprocessing.data_aguments(args, traindataset)
     
