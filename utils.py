@@ -24,10 +24,10 @@ def get_tb_experiment_name(args):
     if args.load_from_checkpoint is not None:
         exp_name += "Checkpoint=%s - " % args.load_from_checkpoint
     exp_name += "BS=%i_" % args.batch_size 
-    if args.epoch is not None:
-        exp_name += "EP=%i_" % args.epoch
-    if args.lr is not None:
-        exp_name += "LR=%.4f_" % args.lr
+    if args.epoch_num is not None:
+        exp_name += "EP=%i_" % args.epoch_num
+    if args.learning_rate is not None:
+        exp_name += "LR=%.4f_" % args.learning_rate
     exp_name += "SEED=%i_" % args.seed
 
 
@@ -99,4 +99,4 @@ def plot_result_gragh(args, target, prediction):
     data_path = os.path.join(os.getcwd(), "figure_save")
     if not os.path.exists(data_path):
         os.mkdir(data_path)
-    plt.savefig(f"{data_path}/VAE_figure_epoch{int(args.epochs)}_batch{args.batch_size}.png")
+    plt.savefig(f"{data_path}/figure_epoch{int(args.epoch_num)}_batch{args.batch_size}.png")

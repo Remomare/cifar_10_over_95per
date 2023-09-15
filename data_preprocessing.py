@@ -9,5 +9,5 @@ import torch.optim as optim
 
 def data_aguments(args, trainset):
     
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, num_workers=2)
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
     return trainset, trainloader

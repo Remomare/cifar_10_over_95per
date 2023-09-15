@@ -23,7 +23,7 @@ def train_epoch(args, epoch_idx, model, dataloader, optimizer, scheduler, loss_f
     trn_loss = 0.0
     train_total = 0
     train_correct = 0
-    for batch_idx, batch in enumerate(tqdm(dataloader, desc=f'TRAIN EPOCH {epoch_idx}/{args.epoch}')):
+    for batch_idx, batch in enumerate(tqdm(dataloader, desc=f'TRAIN EPOCH {epoch_idx}/{args.epoch_num}')):
         x, labels = batch
         # grad init
         optimizer.zero_grad()
