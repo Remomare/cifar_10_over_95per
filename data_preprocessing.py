@@ -14,12 +14,16 @@ import sys
 
 def data_aguments(args, trainset):
     
+    transform_dataset = transforms.Compose([transforms.Resize((256, 256)),
+                                            transforms.AutoAugment(policy=transforms.autoaugment.AutoAugmentPolicy.IMAGENET, interpolation=transforms.InterpolationMode.BILINEAR),
+                                            transforms.ToTensor()])
+    transform_dataset = torchvision.datasets.ImageFolder(trainset, # 다운로드 받은 폴더의 root 경로를 지정합니다.
+                                    transform=transform_dataset)
+
+    # 데이터 로더를 생성합니다.
+    transform_loader = torch.utils.data.DataLoader(transform_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
     
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
-
-
-
-    return trainset, trainloader
+    return transform_dataset, transform_loader
 
 def data_aguments_use_opcv(args, trainset):
     arument_path = os.path.join(args.data_set , '/aguments')
@@ -29,8 +33,10 @@ def data_aguments_use_opcv(args, trainset):
     
     dataset_list = os.listdir(arument_path)
     trainset = main_TransformImage(args, dataset_list, arument_path)
+    transform_loader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
+ 
     
-    return trainset, 
+    return trainset, transform_loader
 
 
 def save(keyPath, file_name, cv_img, rate, type):
