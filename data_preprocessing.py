@@ -17,10 +17,9 @@ def data_aguments(args, trainset):
     transform_dataset = transforms.Compose([transforms.Resize((256, 256)),
                                             transforms.AutoAugment(policy=transforms.autoaugment.AutoAugmentPolicy.IMAGENET, interpolation=transforms.InterpolationMode.BILINEAR),
                                             transforms.ToTensor()])
-    transform_dataset = torchvision.datasets.ImageFolder(trainset, # 다운로드 받은 폴더의 root 경로를 지정합니다.
+    transform_dataset = torchvision.datasets.ImageFolder(trainset,
                                     transform=transform_dataset)
 
-    # 데이터 로더를 생성합니다.
     transform_loader = torch.utils.data.DataLoader(transform_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
     
     return transform_dataset, transform_loader
